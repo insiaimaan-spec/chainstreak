@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>ChainStreak — Daily Check-In</title>
+
+  <meta name="fc:frame" content='{
+    "version":"next",
+    "imageUrl":"https://chainstreak.vercel.app/og.png",
+    "button":{
+      "title":"🔥 Start My Streak",
+      "action":{
+        "type":"launch_frame",
+        "name":"ChainStreak",
+        "url":"https://chainstreak.vercel.app",
+        "splashImageUrl":"https://chainstreak.vercel.app/splash.png",
+        "splashBackgroundColor":"#04080f"
+      }
+    }
+  }'/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* CSS remains exactly the same as your original design */
+    :root {
+      --bg:       #04080f;
+      --surface:  #080f1a;
+      --card:     #0a1520;
+      --border:   rgba(0,200,255,0.12);
+      --border2:  rgba(0,200,255,0.06);
+      --cyan:     #00c8ff;
+      --cyan-dim: rgba(0,200,255,0.15);
+      --orange:   #ff6b2b;
+      --orange-dim:rgba(255,107,43,0.15);
+      --gold:     #ffd166;
+      --green:    #00e5a0;
+      --red:      #ff4560;
+      --text:     #e8f4ff;
+      --text2:    #7a9ab8;
+      --text3:    #3a5068;
+      --r:        16px;
+      --rs:       10px;
+    }
+    /* ... (rest of your original CSS) ... */
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2L4.5 13.5H11L10 22L20.5 9.5H14L13 2Z" fill="white" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">ChainStreak</span>
+    </div>
+    <div class="chain-pill">
+      <div class="chain-logo">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="#0052ff"/>
+          <path d="M12 5C8.13 5 5 8.13 5 12s3.13 7 7 7c3.44 0 6.32-2.48 6.88-5.75H12V10.5h8.93c.05.49.07.98.07 1.5 0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3c2.27 0 4.35.84 5.93 2.22l-2.13 2.13C14.77 6.3 13.46 5.75 12 5z" fill="white"/>
+        </svg>
+      </div>
+      Base
+    </div>
+  </div>
+  </div>
+
+<script>
+const CONFIG = {
+  NEYNAR_API_KEY: "DE8E47D8-9F62-4C74-B461-19D61C82E51F",
+  TREASURY: "0xb55ab0302Db8C8827fcBDE7F2CF33C40a7783784",
+
+  // 🟢 UPDATED: Main Application URL
+  APP_URL: "https://chainstreak.vercel.app",
+
+  FEE_ETH: 0.000025,
+  CHAIN_ID: "0x2105",
+  PRIZES: ["$250", "$2,500", "$350", "$250", "$150", "$100", "$350", "$250", "$150", "$100"]
+};
+</script>
+
+<script type="module">
+// ... (Your init logic and SDK import remain same)
+
+/* ── UPDATED: Share on Farcaster Logic ── */
+window.shareOnFarcaster = async function() {
+  const { fid, streak } = window._cs || {};
+  const streakNum = streak || 0;
+  
+  // 🟢 UPDATED: Using the new Vercel domain for referral links
+  const refUrl = 'https://chainstreak.vercel.app' + (fid ? '?ref=' + fid : '');
+  const text = '⚡ I just checked in on ChainStreak! ' + (streakNum > 0 ? '🔥 ' + streakNum + '-day streak!' : '') + '\n\n💰 $500,000 total reward pool\n🏆 Top referrers win up to $5,000\n🌊 $350K shared among all streakers\n\nStart your streak 👇\n' + refUrl;
+
+  const btn = document.getElementById('btn-share');
+  if (btn) btn.textContent = '⏳ Opening Warpcast…';
+
+  try {
+    if (sdk && sdk.actions && sdk.actions.openUrl) {
+      await sdk.actions.openUrl('https://warpcast.com/~/compose?text=' + encodeURIComponent(text));
+    } else {
+      window.open('https://warpcast.com/~/compose?text=' + encodeURIComponent(text), '_blank');
+    }
+  } catch(e) {
+    window.open('https://warpcast.com/~/compose?text=' + encodeURIComponent(text), '_blank');
+  }
+
+  setTimeout(() => {
+    if (btn) btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 2h9L21 7.5v9L16.5 22h-9L2 16.5v-9L7.5 2zm4.5 3.5L6 12l6 6.5L18 12l-6-5.5z"/></svg> Share on Farcaster';
+  }, 3000);
+};
+
+// ... (Rest of your original logic)
+</script>
+</body>
+</html>
